@@ -15,11 +15,20 @@ module.exports = {
         const database = db.db("fates-admin-v2");
         database.collection("whitelists").findOneAndUpdate({ discord_id: Target.user.id }, {$set:{blacklisted:true,reason:reason??null}}, (err, res) => {
             if (res.value) {
-                message.channel.send(new MessageEmbed()
+                Target.roles.remove(message.guild.roles.cache.find(role => role.name.toLowerCase() == "buyer"))
+                .then(m => {
+                    message.channel.send(new MessageEmbed()
                     .setTitle("Completed")
                     .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-                    .setTitle(`${Target} is now blacklisted` + reason ? ` with reason ${reason}` : ``)
-                )
+                    .setTitle(`${m} is now blacklisted` + reason ? ` with reason ${reason}` : ``)
+                    )
+                }, r => {
+                    message.channel.send(new MessageEmbed()
+                        .setTitle("Fail")
+                        .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+                        .setDescription(`${Target} is blacklisted but i could not remove the buyer role, ||${r}||`)
+                    );
+                })
             } else {
                 message.channel.send(new MessageEmbed()
                     .setTitle("Fail")

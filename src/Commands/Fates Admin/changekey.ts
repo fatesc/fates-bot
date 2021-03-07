@@ -7,7 +7,7 @@ module.exports = {
     name: "changekey",
     description: "changes a key of a user",
     usage: "changekey [user]",
-    permission: ["Mod", "Support", "ADMINISTRATOR"],
+    permission: ["Mod", "Support"],
     run(message: Message, args: string[], db: MongoClient) {
         const Target = message.mentions.members.first() || message.guild.members.cache.get(args[0])
         const key = generateString(12);
@@ -20,7 +20,12 @@ module.exports = {
                 message.channel.send(new MessageEmbed()
                     .setTitle("Completed")
                     .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-                    .setDescription(`${Target}'s key has been changed`)
+                    .setDescription(`${Target}'s key has been changed to `)
+                )
+                Target.send(new MessageEmbed()
+                    .setTitle("Completed")
+                    .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+                    .setDescription(`your key has been changed to \`${key}\``)
                 )
             } else {
                 message.channel.send(new MessageEmbed()

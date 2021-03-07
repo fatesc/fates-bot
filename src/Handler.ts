@@ -25,7 +25,7 @@ function runCommand(command, message: Message, args: string[], db?: MongoClient)
         if (typeof(command.permission) == 'string' && !message.member.hasPermission(command.permission)) {
             return message.channel.send(`you dont have enough permission to run this command ${message.member}`);
         }
-        else if (typeof(command.permission) == 'object' && !message.member.roles.cache.some(role => command.permission.includes(role.name))) {
+        else if (typeof(command.permission) == 'object' && !message.member.roles.cache.some(role => command.permission.includes(role.name)) && !message.member.hasPermission("ADMINISTRATOR")) {
             return message.channel.send(`you dont have enough permission to run this command ${message.member}`);
         }
     }

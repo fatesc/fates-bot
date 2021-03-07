@@ -30,19 +30,27 @@ module.exports = {
             database.collection("whitelists").insertOne(toInsert, (err, res) => {
                 if (err) throw err;
                 if (res.ops[0].fingerprint == whitelist) {
-                    message.channel.send(new MessageEmbed()
-                        .setTitle("Whitelisted")
-                        .setAuthor(message.member.user.username, message.member.user.displayAvatarURL({ dynamic: true }))
-                        .setDescription(`${Target} is whitelisted`)
-                    );
-
-                    
-
-                    Target.send(new MessageEmbed()
-                        .setTitle("Whitelisted")
-                        .setAuthor(Target.user.username, Target.user.displayAvatarURL({ dynamic: true }))
-                        .setDescription(`your fate's admin key is \`${key}\``)
-                    );
+                    Target.roles.add(message.guild.roles.cache.find(role => role.name.toLowerCase() == "buyer"))
+                    .then(m => {
+                        m.send(new MessageEmbed()
+                            .setTitle("Whitelisted")
+                            .setAuthor(Target.user.username, Target.user.displayAvatarURL({ dynamic: true }))
+                            .setDescription(`your fate's admin key is \`${key}\``)
+                        ).then(() => {
+                            message.channel.send(new MessageEmbed()
+                                .setTitle("Whitelisted")
+                                .setAuthor(message.member.user.username, message.member.user.displayAvatarURL({ dynamic: true }))
+                                .setDescription(`${Target} is whitelisted`)
+                            );
+                        }, r => {
+                            message.channel.send(`${Target}, turn on dms for this server and do the \`showkey\` if you want to see your key`, {
+                                embed: new MessageEmbed()
+                                .setTitle("Whitelisted")
+                                .setAuthor(message.member.user.username, message.member.user.displayAvatarURL({ dynamic: true }))
+                                .setDescription(`${Target} is whitelisted but i couldnt send them their key`)
+                            });
+                        });
+                    });
                 } else {
                     add();
                 }
