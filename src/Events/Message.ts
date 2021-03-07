@@ -26,10 +26,12 @@ export default function() {
         console.log(`connected to mongodb.`);
         client.on("message", (message: Message) => {
             const prefix = config.prefix
-            const first = message?.mentions?.members.first()
-            if (first && first.user.id == client.user.id) {
-                return message.channel.send(`Prefix is \`${prefix}\``)
-            }
+            try {
+                const first = message?.mentions?.members.first()
+                if (first && first.user.id == client.user.id) {
+                    return message.channel.send(`Prefix is \`${prefix}\``)
+                }
+            } catch {}
             checkMessage(message);
             
             if (!message.content.startsWith(prefix) || message.author.bot) return;

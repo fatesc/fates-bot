@@ -27,7 +27,7 @@ module.exports = {
                 .setDescription(`${description.join("\n")}`)
             );
         }
-        const helpmap : Map<string,string> = new Map([["1️⃣","fun"],["2️⃣","nsfw"],["3️⃣","moderation"],["4️⃣","fates-admin"]]);
+        const helpmap : Map<string,string> = new Map([["1️⃣","fun"],["2️⃣","nsfw"],["3️⃣","moderation"],["4️⃣","fates admin"]]);
         let help = true
         message.channel.send(new MessageEmbed()
             .setTitle("Commands")
