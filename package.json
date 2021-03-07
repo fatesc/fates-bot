@@ -8,6 +8,7 @@
     "lint": "prettier --write .",
     "build": "tsc && echo build complete",
     "start": "npm run build && node dist/Client.js",
+    "start2": "npm run build && pm2 start dist/Client.js",
     "nodemon": "npx nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"npm run start\""
   },
   "keywords": [],
