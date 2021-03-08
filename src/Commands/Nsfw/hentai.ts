@@ -12,7 +12,7 @@ module.exports = {
     nsfw: true,
     cooldown: 2,
     guildOnly: true,
-    run(client:Client, message:Message, args:string[]){
+    run(message:Message, args:string[]){
         let passed = [!Number.isNaN(args[0]) ]
         const amount = !passed[0] ? 1 : args[0]
         let type =  (passed[0] ? args[1] ?? 1 : typeMap.get(args[0])) ?? 1
@@ -29,10 +29,10 @@ module.exports = {
         }).then(res => res.json(), err => {return message.channel.send("Got error from pozm's api " + err.name)})
         .then(body => {
             const files = body.data.files.join(" ")
-            if (body.data.files.join("") != "") return message.channel.send(`no results found ${message.member}`);
+            if (body.data.files.join("") == "") return message.channel.send(`no results found ${message.member}`);
 
-            for (let i = 0; i < files.length; i += 2000) {
-                message.channel.send(`${files.substring(i, Math.min(files.length, i + 2000))} ${message.member}`);
+            for (let i = 0; i < body.data.files; i += 4) {
+                message.channel.send(`${body.data.files.slice(i, i + 4).join(" ")} ${message.member}`);
             }
          },err=>{message.channel.send('Got error when parsing json :' + err.name)});
     }
