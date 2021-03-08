@@ -27,7 +27,7 @@ function deepsearch(folder, callback) {
 }
 
 deepsearch(join(__dirname + "/Commands/"), (file) => {
-    const type = file.split("\\")[file.split("\\").length - 2]
+    const type = file.split("\\")[file.split("\\").length - 2] ?? file.split("/")[file.split("/").length - 2] // adding so i can run on linux aswell
     if (type == "Util") return;
     const command = require(file);
     commands.set(command.name, command);
@@ -40,6 +40,7 @@ client.on("ready", () => {
     client.user.setActivity("fates admin", {type: "PLAYING"});
     deepsearch(join(__dirname + "/Events/"), (file) => {
         require(file).default();
+        console.log(`Event ${file.toString()} is ready!`);
     })
 });
 
@@ -48,7 +49,7 @@ export const mongo_client = new MongoClient(process.env.MONGOURL, {
     useNewUrlParser: true
 })
 
-client.login(process.env.OLDTOKEN);
+client.login(process.env.TOKEN);
 
 export { client, commands, commandTypes } 
 

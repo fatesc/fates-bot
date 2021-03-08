@@ -1,7 +1,5 @@
-
 import * as fetch from "node-fetch";
-import { Client, Message } from "discord.js";
-import { strict } from "node:assert";
+import { Message } from "discord.js";
 
 const typeMap : Map<string,number> = new Map([["normal",1],["yuri",2],["femboy",3],["furry",4],["futa",5],["yoai",6]])
 

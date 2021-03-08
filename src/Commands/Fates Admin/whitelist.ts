@@ -37,7 +37,6 @@ module.exports = {
                             .setAuthor(Target.user.username, Target.user.displayAvatarURL({ dynamic: true }))
                             .setDescription(`your fate's admin key is \`${key}\`, use this key for the script in <#769997572470996992>`)
                         ).then(() => {
-                            console.log("test")
                             message.channel.send(new MessageEmbed()
                                 .setTitle("Whitelisted")
                                 .setAuthor(message.member.user.username, message.member.user.displayAvatarURL({ dynamic: true }))

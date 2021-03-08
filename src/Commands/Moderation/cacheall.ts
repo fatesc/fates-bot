@@ -1,0 +1,12 @@
+import { Client, Message, MessageFlags } from "discord.js";
+
+module.exports = {
+    name: "cacheall",
+    description: "caches all the users in the server if not already",
+    permission: "ADMINISTRATOR",
+    cooldown: 30,
+    usage: "cacheal;",
+    run(message : Message, args : string[]){
+        message.guild.members.fetch().then(() => message.channel.send(`${message.member} cached ${message.guild.members.cache.size} members in ${message.guild.name}`));
+    }
+} as Command
