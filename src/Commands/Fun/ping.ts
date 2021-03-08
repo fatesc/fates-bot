@@ -1,5 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
 import { client } from "../../Client";
+import { timeConversion } from "../Util/timeConversion";
 
 module.exports = {
     name: "ping",
@@ -10,7 +11,7 @@ module.exports = {
         message.channel.send(new MessageEmbed()
             .setTitle("Ping :ping_pong:")
             .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-            .setDescription(`Latency: \`${message.createdTimestamp - Date.now()} ms\`\nClient: \`${client.ws.ping} ms\`\nUptime: \`${(client.uptime / 1000).toFixed(1)} s\``)
+            .setDescription(`Latency: \`${message.createdTimestamp - Date.now()} ms\`\nClient: \`${client.ws.ping} ms\`\nUptime: \`${timeConversion(client.uptime)}\``)
         )
     }
 } as Command

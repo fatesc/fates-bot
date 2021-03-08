@@ -49,7 +49,7 @@ export const mongo_client = new MongoClient(process.env.MONGOURL, {
     useNewUrlParser: true
 })
 
-client.login(process.env.TOKEN);
+client.login(process.env.OLDTOKEN);
 
 export { client, commands, commandTypes } 
 
