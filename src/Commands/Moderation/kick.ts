@@ -1,5 +1,6 @@
-import { Message } from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import { memoryUsage } from "process";
+import { Command } from "../../Command";
 
 module.exports = {
     name: "kick",
@@ -12,9 +13,17 @@ module.exports = {
         if (!Target) return message.channel.send("invalid command usage");
 
         Target.kick(reason).then(member => {
-            message.channel.send(`kicked ${member.user.tag}`);
+            message.channel.send(new MessageEmbed()
+                .setTitle("Kicked")
+                .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+                .setDescription(`${Target} is now kicked from this guild`)
+            );
         }, reject => {
-            message.channel.send(`couldnt kick ${Target.user.tag}`);
+            message.channel.send(new MessageEmbed()
+                .setTitle("Fail")
+                .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+                .setDescription(`${Target} could not be kicked from this guild ||${reject}||`)
+            );
         });
     }
-}
+} as Command

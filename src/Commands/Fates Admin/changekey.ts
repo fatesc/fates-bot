@@ -1,5 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
 import { MongoClient } from "mongodb";
+import { Command } from "../../Command";
 import { helpCommand } from "../Util/HelpCommand";
 import { generateString } from "../Util/StringGen";
 

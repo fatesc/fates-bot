@@ -1,5 +1,6 @@
-import { Message } from "discord.js"
+import { Message, MessageEmbed } from "discord.js"
 import { parse } from "dotenv/types";
+import { Command } from "../../Command";
 
 module.exports = {
     name: "purge",
@@ -16,8 +17,11 @@ module.exports = {
         if (message.channel.type != 'dm') {
             await message.channel.messages.fetch({ limit: Amount + 1 });
             await message.channel.bulkDelete(Amount + 1, true);
-            message.channel.send(`purged ${Amount} messages`);
+            message.channel.send(new MessageEmbed()
+                .setTitle("Fail")
+                .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+                .setDescription(`purged ${Amount + 1} messages`)
+            );
         }
     }
-
-}
+} as Command

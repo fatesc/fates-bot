@@ -1,5 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
 import { client, commands, commandTypes } from "../../Client";
+import { Command } from "../../Command";
 
 module.exports = {
     name: "help",

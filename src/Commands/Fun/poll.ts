@@ -1,4 +1,5 @@
 import { Message, Util } from "discord.js";
+import { Command } from "../../Command";
 import { helpCommand } from "../Util/HelpCommand"
 
 module.exports = {

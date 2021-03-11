@@ -1,5 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
 import { MongoClient } from "mongodb";
+import { Command } from "../../Command";
 
 module.exports = {
     name: "showkey",

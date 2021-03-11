@@ -1,4 +1,5 @@
 import { Message } from "discord.js"
+import { Command } from "../../Command";
 import { deletedMessages } from "../../Events/MessageDelete";
 
 module.exports = {

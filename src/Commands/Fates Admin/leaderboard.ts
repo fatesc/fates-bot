@@ -1,5 +1,6 @@
 import { Client, Message } from "discord.js";
 import { MongoClient } from "mongodb";
+import { Command } from "../../Command";
 import { newembed } from "../Util/EmbedGen";
 
 module.exports = {

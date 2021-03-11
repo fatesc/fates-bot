@@ -1,4 +1,5 @@
 import { Message } from "discord.js";
+import { Command } from "../../Command";
 
 module.exports = {
     name: "flip",

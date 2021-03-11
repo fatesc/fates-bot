@@ -1,5 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
 import { MongoClient } from "mongodb";
+import { Command } from "../../Command";
 import { helpCommand } from "../Util/HelpCommand";
 
 module.exports = { 
@@ -20,7 +21,7 @@ module.exports = {
                     message.channel.send(new MessageEmbed()
                     .setTitle("Completed")
                     .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-                    .setTitle(`${m} is now blacklisted` + reason ? ` with reason ${reason}` : ``)
+                    .setDescription(`${m} is now blacklisted` + reason ? ` with reason ${reason}` : ``)
                     )
                 }, r => {
                     message.channel.send(new MessageEmbed()

@@ -1,4 +1,5 @@
 import { Message, MessageEmbed } from "discord.js";
+import { Command } from "../../Command";
 const fetch = require("node-fetch");
 
 module.exports = {

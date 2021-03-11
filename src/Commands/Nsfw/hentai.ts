@@ -1,5 +1,6 @@
 import * as fetch from "node-fetch";
 import { Message } from "discord.js";
+import { Command } from "../../Command";
 
 const typeMap : Map<string,number> = new Map([["normal",1],["yuri",2],["femboy",3],["furry",4],["futa",5],["yoai",6]])
 
@@ -29,9 +30,9 @@ module.exports = {
             const files = body.data.files.join(" ")
             if (body.data.files.join("") == "") return message.channel.send(`no results found ${message.member}`);
 
-            for (let i = 0; i < body.data.files; i += 4) {
+            for (let i = 0; i < body.data.files.length; i += 4) {
                 message.channel.send(`${body.data.files.slice(i, i + 4).join(" ")} ${message.member}`);
             }
          },err=>{message.channel.send('Got error when parsing json :' + err.name)});
     }
-} as Command     
+} as Command

@@ -1,4 +1,5 @@
 import { Client, Message, MessageFlags } from "discord.js";
+import { Command } from "../../Command";
 
 module.exports = {
     name: "cacheall",
@@ -7,6 +8,6 @@ module.exports = {
     cooldown: 30,
     usage: "cacheal;",
     run(message : Message, args : string[]){
-        message.guild.members.fetch().then(() => message.channel.send(`${message.member} cached ${message.guild.members.cache.size} members in ${message.guild.name}`));
+        message.guild.members.fetch().then(() => message.inlineReply(`cached ${message.guild.members.cache.size} members in ${message.guild.name}`));
     }
 } as Command

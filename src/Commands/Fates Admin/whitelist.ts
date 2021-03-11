@@ -1,5 +1,6 @@
 import { GuildMember, Message, MessageEmbed } from "discord.js";
 import { MongoClient } from "mongodb";
+import { Command } from "../../Command";
 import { RandStrc, chinesechars } from "../Util/ChineseGen";  
 import { helpCommand } from "../Util/HelpCommand";
 
