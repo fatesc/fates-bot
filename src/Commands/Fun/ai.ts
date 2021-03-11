@@ -14,7 +14,7 @@ module.exports = {
         fetch(`http://api.brainshop.ai/get?bid=155222&key=yekyHgau6HXi1nzz&uid=${message.author.username}&msg=${msg}`)
         .then(res => res.json())
         .then(body => {
-            message.inlineReply(Util.cleanContent(body.ctn, message));
+            message.inlineReply(Util.cleanContent(body.cnt, message));
         });
     }
 } as Command
