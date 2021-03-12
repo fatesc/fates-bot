@@ -10,6 +10,8 @@ const client : Client = new Client({ ws: { intents } });
 const commands : Collection<String, any> = new Collection();
 const commandTypes : Map<String, any> = new Map();
 
+require('./extend/idx') // just extend standard structures
+
 function deepsearch(folder, callback) {
     readdir(folder, (err, files) => {
         if (err) throw err;
