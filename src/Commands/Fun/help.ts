@@ -19,7 +19,7 @@ module.exports = {
             let description = []        
             commands.forEach(cmd => {
                 if (commandTypes.get(cmd.name) == type){
-                    if (type == "fates-admin" && !message.member.hasPermission("ADMINISTRATOR")) return
+                    if (type == "fates admin" && !message.member.hasPermission("ADMINISTRATOR")) return
                     description.push(`${cmd.name}: ${cmd.description}`);
                 }
             });

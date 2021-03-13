@@ -9,7 +9,7 @@ module.exports = {
     name: "whitelist",
     description: "whitelists a user for them to use fates admin",
     usage: "whitelist [user] [hwid/whitelist]",
-    permission: ["Support", "ADMINISTRATOR"],
+    permission: "ADMINISTRATOR",
     aliases: ["wl"],
     guildOnly: true,
     run(message: Message, args: string[], db: MongoClient) {

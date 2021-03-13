@@ -7,7 +7,7 @@ module.exports = {
     name: "update",
     description: "updates a users whitelist for fates admin",
     usage: "update [user] [hwid/whitelist]",
-    permission: ["Support"],
+    permission: ["Support", "Mod", "ADMINISTRATOR"],
     run(message: Message, args: string[], db: MongoClient) {
         const Target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         const whitelist = args[1] && args[1].length == 64 ? args[1] : undefined
