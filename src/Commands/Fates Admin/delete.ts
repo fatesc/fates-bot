@@ -8,7 +8,7 @@ module.exports = {
     name: "deletedata",
     description: "deltetes a users whitelist from a db",
     usage: "deletedata [user]",
-    permission: ["Mod", "Support", "ADMINISTRATOR"],
+    permission: "ADMINISTRATOR",
     aliases: ["delete"],
     run(message: Message, args: string[], db: MongoClient) {
         const Target = message.mentions.members.first() || message.guild.members.cache.get(args[0])
