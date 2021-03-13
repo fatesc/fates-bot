@@ -42,7 +42,7 @@ client.on("ready", () => {
     client.user.setActivity("fates admin", {type: "PLAYING"});
     deepsearch(join(__dirname + "/Events/"), (file) => {
         require(file).default();
-        console.log(`Event ${file.toString()} is ready!`);
+        console.log(`Event ${(file.split("\\")[file.split("\\").length - 1] ?? file.split("/")[file.split("/").length - 1]).replace(/\.js/,"")} is ready!`);
     })
 });
 

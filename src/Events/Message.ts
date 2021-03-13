@@ -6,7 +6,7 @@ import { runCommand } from "../Handler";
 
 function checkMessage(message: Message) { 
     const reg = new RegExp(/.gg\/|.com\/invite/gi);
-    if (message.content.match(reg)) {
+    if (message.content.match(reg) && message.author.id != client.user.id) {
         if (message.deletable){
             message.delete()
             .then(() => {

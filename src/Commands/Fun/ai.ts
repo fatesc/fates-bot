@@ -14,7 +14,9 @@ module.exports = {
         fetch(`http://api.brainshop.ai/get?bid=155222&key=yekyHgau6HXi1nzz&uid=${message.author.username}&msg=${msg}`)
         .then(res => res.json())
         .then(body => {
-            message.inlineReply(Util.cleanContent(body.cnt, message));
+            message.inlineReply(body.cnt, {
+                disableMentions: "all"
+            });
         });
     }
 } as Command

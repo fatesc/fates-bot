@@ -1,5 +1,6 @@
 import { GuildMember, Message } from "discord.js";
 import { MongoClient } from "mongodb";
+import { logCommand } from "./Commands/Util/server-log";
 
 const cooldowns : Map<String,Map<String,any>> = new Map(); 
 
@@ -47,13 +48,18 @@ function runCommand(command, message: Message, args: string[], db?: MongoClient)
         }
     }
 
+    if (command.permission) {
+        logCommand(command, message, args)
+        .catch(err => console.error(err));
+    }
+
     try {
         command.run(message, args, db);
         commandTimeouts.set(message.author.id, now);
         setTimeout(() => commandTimeouts.delete(message.author.id), cooldown);
         message.channel.stopTyping(true);
     } catch (err) {
-        console.log(err);
+        console.error(err);
     }
 }
 
