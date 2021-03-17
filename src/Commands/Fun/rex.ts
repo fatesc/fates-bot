@@ -74,7 +74,7 @@ module.exports = {
         })
         .then(res => res.json())
         .then(body => {
-            message.channel.send(body, {
+            message.channel.send(body.Result, {
                 disableMentions: "all"
             });
         });
