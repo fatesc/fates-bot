@@ -36,8 +36,7 @@ export default function() {
             
             if (!message.content.startsWith(prefix) || message.author.bot) return;
         
-            const rawargs = message.content.slice(prefix.length).split(", ");
-            rawargs.forEach(arg => {
+            message.content.slice(prefix.length).split("!!").forEach(arg => {
                 const args : any = arg.split(" ");
                 const command : any = args.shift().toLowerCase();
                 const commandModule = commands.get(command) || commands.find(a => a.aliases && a.aliases.includes(command));

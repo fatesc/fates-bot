@@ -11,7 +11,7 @@ module.exports = {
     run(message: Message, args: string[]) {
         const msg = args.join(" ");
         if (!msg) return helpCommand(message, this.name, `${message.member}, Invalid Command Usage\n`);
-        fetch(`http://api.brainshop.ai/get?bid=155222&key=yekyHgau6HXi1nzz&uid=${message.author.username}&msg=${msg}`)
+        fetch(`http://api.brainshop.ai/get?bid=155222&key=${process.env.BRAINKEY}&uid=${message.author.username}&msg=${msg}`)
         .then(res => res.json())
         .then(body => {
             message.inlineReply(body.cnt, {

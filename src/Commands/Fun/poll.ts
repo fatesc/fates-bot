@@ -9,7 +9,9 @@ module.exports = {
     run(message: Message, args: string[]) { 
         if (!args[0]) return helpCommand(message, this.name, `${message.member}, Invalid Command Usage\n`);
         const polltext = args.join(" ")
-        message.channel.send(Util.cleanContent(`poll: \`${polltext}\`\n\n:one: yes\n\n:two: no\n\n`, message))
+        message.channel.send(`poll: \`${polltext}\`\n\n:one: yes\n\n:two: no\n\n`, {
+            disableMentions: "all"
+        })
         .then(async msg => {
             await msg.react("1️⃣");
             await msg.react("2️⃣");
