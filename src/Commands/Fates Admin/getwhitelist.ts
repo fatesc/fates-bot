@@ -1,5 +1,4 @@
 import { Message, MessageEmbed } from "discord.js";
-import { ResultSetHeader } from "mysql2";
 import { Command } from "../../types";
 import { user } from "../../types";
 import { helpCommand } from "../Util/HelpCommand";
@@ -9,7 +8,7 @@ import columnify from "columnify"
 module.exports = {
     name: "getwhitelist",
     description: "gets a users whitelist",
-    usage: "getwhitelist [user]",
+    usage: "getwhitelist [user] [format]",
     permission: ["Mod", "Support", "ADMINISTRATOR"],
     aliases: ["getwl"],
     run(message: Message, args: string[]) {
@@ -18,11 +17,13 @@ module.exports = {
 
         AsyncQuery<Array<user>>("SELECT * FROM whitelist.user WHERE discord_id = ?",[Target.user.id])
         .then(res => {
+            const format: Map<string, string> = new Map([["json",JSON.stringify(res[0])],["column", columnify(res[0])]]) 
+
             if (res) {
                 message.channel.send(new MessageEmbed()
                     .setTitle("Completed")
                     .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-                    .setDescription(`${Target}'s whitelist information:\n\`\`\`\n${columnify(res[0])}\`\`\``)
+                    .setDescription(`${Target}'s whitelist information:\n\`\`\`${args[1] ? format.get(args[1]) ?? "json\n" + JSON.stringify(res[0]) : "json\n" + JSON.stringify(res[0])}\`\`\``)
                 );
             } else {
                 message.channel.send(new MessageEmbed()

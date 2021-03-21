@@ -1,5 +1,4 @@
 import { Message, MessageEmbed } from "discord.js";
-import { MongoClient } from "mongodb";
 import { ResultSetHeader } from "mysql2";
 import { Command } from "../../types";
 import { helpCommand } from "../Util/HelpCommand";
