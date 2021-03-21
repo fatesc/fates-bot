@@ -1,5 +1,5 @@
 import { GuildMember, Message } from "discord.js";
-import { MongoClient } from "mongodb";
+import { PoolConnection } from "mysql2/promise"
 import { logCommand } from "./Commands/Util/server-log";
 
 const cooldowns : Map<String,Map<String,any>> = new Map(); 
@@ -9,7 +9,7 @@ function adminCheck(user: GuildMember) {
     return user.hasPermission("ADMINISTRATOR") || user.roles.cache.some(role => adminRoles.includes(role.name));
 }
 
-function runCommand(command, message: Message, args: string[], db?: MongoClient) {
+function runCommand(command, message: Message, args: string[], db?: PoolConnection) {
     if (!command) return
     message.channel.startTyping(2);
     setTimeout(() => {

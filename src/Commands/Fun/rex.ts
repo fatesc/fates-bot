@@ -1,4 +1,4 @@
-import { Command } from "../../Command";
+import { Command } from "../../types";
 import { Message } from "discord.js";
 import * as fetch from "node-fetch";
 import { helpCommand } from "../Util/HelpCommand";
@@ -57,23 +57,28 @@ module.exports = {
     description: "allows you to run code",
     aliases: ["code"],
     cooldown: 2,
-    usage: "rex [code]",
+    usage: "rex [code]/[show]",
     guildOnly: true,
     run(message: Message, args: string[]) {
         if (!args[0]) return helpCommand(message, this.name, `${message.member}, Invalid Command Usage\n`);
-        const lang: string = args[0]
+        if (args[0] == "show") return message.channel.send(`Languages: \`\`\`\n${Object.keys(numbers).join("\n")}\`\`\``);
+        const lang: string = numbers[args[0]]?.toString() ?? 1
         args.splice(0, 1);
         const code: string = args.join(" ").replace(/^`\S+|`+$/gm, "");
+        const data = {
+            "LanguageChoice": lang,
+            "Program": code,
+            "Input": "",
+            "CompilerArgs": ""
+        }
 
         fetch("https://rextester.com/rundotnet/api", {
             method: "POST",
-            data: {
-                "LanguageChoice": numbers[lang]?.toString() ?? 1,
-                "Program": code
-            }
+            data
         })
         .then(res => res.json())
         .then(body => {
+            console.log(body)
             message.channel.send(body.Result, {
                 disableMentions: "all"
             });

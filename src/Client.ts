@@ -1,7 +1,8 @@
 import { Client, Collection, Intents } from "discord.js"
 import { readdir, stat } from "fs"
 import { join } from "path";
-import { MongoClient } from "mongodb";
+import { ConnectionOptions } from "mysql2"
+import { createPool } from "mysql2/promise"
 
 require("dotenv").config({ path: join(__dirname, "../.env") });
 
@@ -46,12 +47,21 @@ client.on("ready", () => {
     })
 });
 
-export const mongo_client = new MongoClient(process.env.MONGOURL, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true
+const db: ConnectionOptions = {
+    host: process.env.SQLHOST,
+    user: process.env.SQLUSER,
+    password: process.env.SQLPASSWORD,
+}
+export const sql = createPool(db)
+
+sql.getConnection().then(connection => {
+    console.log(`connected to mysql//mariadb`);
 })
 
 client.login(process.env.OLDTOKEN);
 
 export { client, commands, commandTypes } 
+
+
+
 

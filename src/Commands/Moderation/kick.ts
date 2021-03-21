@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
 import { memoryUsage } from "process";
-import { Command } from "../../Command";
+import { Command } from "../../types";
 import { helpCommand } from "../Util/HelpCommand";
 
 module.exports = {

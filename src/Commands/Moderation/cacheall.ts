@@ -1,5 +1,5 @@
 import { Client, Message, MessageFlags } from "discord.js";
-import { Command } from "../../Command";
+import { Command } from "../../types";
 
 module.exports = {
     name: "cacheall",

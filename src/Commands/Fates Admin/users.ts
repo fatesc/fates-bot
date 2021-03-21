@@ -1,16 +1,17 @@
 import { Message } from "discord.js";
-import { MongoClient } from "mongodb";
-import { Command } from "../../Command";
+import { Command } from "../../types";
+import { user } from "../../types";
+import { AsyncQuery, handleSqlRejection } from "../Util/Query";
 
 module.exports = {
     name: "users",
     description: "gives you the amount of users whitelisted in the db",
     usage: "users",
     permission: "ADMINISTRATOR",
-    run(message: Message, args: string[], db: MongoClient) {
-        const database = db.db("fates-admin-v2");
-        database.collection("whitelists").countDocuments().then(x => {
-            message.inlineReply(`${x} amount of users whitelisted`);
-        });
+    run(message: Message, args: string[]) {
+        AsyncQuery<Array<user>>("SELECT COUNT(*) from whitelist.user")
+        .then(res => {
+            message.inlineReply(`${res[0]["COUNT(*)"]} amount of users whitelisted`);
+        }, (r) => handleSqlRejection(message,r));
     }
 } as Command

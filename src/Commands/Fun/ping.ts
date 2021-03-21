@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
 import { client } from "../../Client";
-import { Command } from "../../Command";
+import { Command } from "../../types";
 import { timeConversion } from "../Util/timeConversion";
 
 module.exports = {

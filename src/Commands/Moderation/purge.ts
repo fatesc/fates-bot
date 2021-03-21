@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from "discord.js"
 import { parse } from "dotenv/types";
-import { Command } from "../../Command";
+import { Command } from "../../types";
 
 module.exports = {
     name: "purge",

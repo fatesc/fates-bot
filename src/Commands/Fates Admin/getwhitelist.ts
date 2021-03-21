@@ -1,7 +1,10 @@
 import { Message, MessageEmbed } from "discord.js";
-import { MongoClient } from "mongodb";
-import { Command } from "../../Command";
+import { ResultSetHeader } from "mysql2";
+import { Command } from "../../types";
+import { user } from "../../types";
 import { helpCommand } from "../Util/HelpCommand";
+import { AsyncQuery, handleSqlRejection } from "../Util/Query";
+import columnify from "columnify"
 
 module.exports = {
     name: "getwhitelist",
@@ -9,26 +12,25 @@ module.exports = {
     usage: "getwhitelist [user]",
     permission: ["Mod", "Support", "ADMINISTRATOR"],
     aliases: ["getwl"],
-    run(message: Message, args: string[], db: MongoClient) {
-        const Target = message.mentions.members.first() || message.guild.members.cache.get(args[0])
+    run(message: Message, args: string[]) {
+        const Target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!Target) return helpCommand(message, this.name, `${message.member}, Invalid Command Usage\n`);
 
-        const database = db.db("fates-admin-v2");
-
-        database.collection("whitelists").findOne({discord_id: Target.user.id }, (err, res) => {
+        AsyncQuery<Array<user>>("SELECT * FROM whitelist.user WHERE discord_id = ?",[Target.user.id])
+        .then(res => {
             if (res) {
                 message.channel.send(new MessageEmbed()
                     .setTitle("Completed")
                     .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-                    .setDescription(`${Target}'s whitelist information:\n\`\`\`json\n${JSON.stringify(res)}\`\`\``)
-                )
+                    .setDescription(`${Target}'s whitelist information:\n\`\`\`\n${columnify(res[0])}\`\`\``)
+                );
             } else {
                 message.channel.send(new MessageEmbed()
-                .setTitle("Fail")
-                .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-                .setDescription(`${Target} is not whitelisted, couldn't show the users whitelist`)
-                )
+                    .setTitle("Fail")
+                    .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+                    .setDescription(`${Target} is not whitelisted, couldn't show the users whitelist`)
+                );
             }
-        })
+        }, (r) => handleSqlRejection(message,r));
     }
 } as Command

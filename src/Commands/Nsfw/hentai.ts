@@ -1,12 +1,12 @@
 import * as fetch from "node-fetch";
 import { Message } from "discord.js";
-import { Command } from "../../Command";
+import { Command } from "../../types";
 
 const typeMap : Map<string,number> = new Map([["normal",1],["yuri",2],["femboy",3],["furry",4],["futa",5],["yoai",6]])
 
 module.exports = {
     name: "hentai",
-    description: "hentai - gives you hentai. first arg is the amount and the second arg is the type, types are 1 for normal, 2 for yuri, 3 for femboy, 4 for furry, 5 for futa, 6 for yoai. (credits to pozm for the api)",
+    description: "first arg is the amount and the second arg is the type, types are 1 for normal, 2 for yuri, 3 for femboy, 4 for furry, 5 for futa, 6 for yoai. (credits to pozm for the api)",
     usage: "hentai [type?] [amount?] [search query?]",
     nsfw: true,
     cooldown: 2,

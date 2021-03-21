@@ -68,10 +68,13 @@
   "dependencies": {
     "@types/mongodb": "^3.6.3",
     "@types/ws": "^7.4.0",
+    "columnify": "^1.5.4",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
-    "mongodb": "^3.6.3",
+    "mongodb": "^3.6.5",
+    "mysql2": "^2.2.5",
     "node-fetch": "^2.6.1",
+    "uninstall": "0.0.0",
     "ws": "^7.4.2"
   }
 }

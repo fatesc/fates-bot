@@ -1,5 +1,5 @@
 import { MessageEmbed, Message } from "discord.js";
-import { Command } from "../../Command";
+import { Command } from "../../types";
 import { sendMessagetoGuild } from "./sendMessagetoGuild";
 
 export function logCommand(command: Command, message: Message, args: string[]): Promise<void|Error> {

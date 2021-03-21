@@ -1,7 +1,8 @@
-import { Client, Message } from "discord.js";
-import { MongoClient } from "mongodb";
-import { Command } from "../../Command";
+import { Message, MessageEmbed } from "discord.js";
+import { Command } from "../../types";
+import { user } from "../../types";
 import { newembed } from "../Util/EmbedGen";
+import { AsyncQuery, handleSqlRejection } from "../Util/Query";
 
 module.exports = {
     name: "executionleaderboard",
@@ -10,14 +11,18 @@ module.exports = {
     aliases: ["elb"],
     cooldown: 30,
     guildOnly: true,
-    run(message: Message, args: string[], db: MongoClient){
-        const database = db.db("fates-admin-v2");
-        const top5 = database.collection("whitelists").find({}).sort({execution_count:-1}).limit(10)
+    run(message: Message, args: string[]){
         const highest = []
-        top5.forEach(a => {
-            highest.push(`${highest.length+1}. ${a.discord_tag} - \`${a.execution_count}\``);
+        AsyncQuery<Array<user>>("SELECT * FROM whitelist.user ORDER BY execution_count DESC LIMIT 10")
+        .then(res => {
+            res.forEach(user => {
+                highest.push(`${highest.length+1}. ${user.discord_tag} - \`${user.execution_count}\``);
+            });
         }).then(() => {
-            newembed(message.channel, "Top 10 executions on fates admin", highest.join("\n"));
-        })
+            message.channel.send(new MessageEmbed()
+                .setTitle("top 10 fates admin executions")
+                .setDescription(highest.join("\n"))
+            );
+        }, (r) => handleSqlRejection(r,message));
     }
 } as Command
