@@ -23,7 +23,7 @@ export async function AsyncQuery<T>(query: string, args?: any[] | object): Promi
 
 
 export function handleSqlRejection(reject, message?: Message, optional?: string) {
-    const rejectionmsg = `${optional ?? "rejection from mysql"} ||${reject}||`
+    const rejectionmsg = `${optional ?? ""} ${reject}`
     if (message) {
         message.channel.send(new MessageEmbed()
             .setTitle("Fail")

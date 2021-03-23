@@ -8,7 +8,7 @@ module.exports = {
     description: "shows you your fates admin key",
     usage: "showkey",
     run(message: Message, args: string[]) {
-        AsyncQuery<Array<user>>("SELECT * FROM whitelist.user WHERE discord_id = ?",
+        AsyncQuery<Array<user>>("SELECT `key` FROM whitelist.user WHERE discord_id = ?",
             [message.author.id]
         ).then(res => {
             if (res[0].id) {

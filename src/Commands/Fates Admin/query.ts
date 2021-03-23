@@ -15,7 +15,7 @@ module.exports = {
             message.channel.send(new MessageEmbed()
                 .setTitle("Complete")
                 .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-                .setDescription(`response: \`\`\`json\n${res[0] ? JSON.stringify(res[0]) : res}\`\`\``)
+                .setDescription(`response: \`\`\`json\n${res ? JSON.stringify(res[0]) : "no response"}\`\`\``)
             )
         }, (r) => handleSqlRejection(r,message));
     }

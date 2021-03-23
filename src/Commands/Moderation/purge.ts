@@ -18,7 +18,7 @@ module.exports = {
             await message.channel.messages.fetch({ limit: Amount + 1 });
             await message.channel.bulkDelete(Amount + 1, true);
             message.channel.send(new MessageEmbed()
-                .setTitle("Fail")
+                .setTitle("Complete")
                 .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
                 .setDescription(`purged ${Amount + 1} messages`)
             );
