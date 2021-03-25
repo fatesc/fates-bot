@@ -8,7 +8,7 @@ module.exports = {
     usage: "query [mysql query]",
     permission: "ADMINISTRATOR",
     run(message: Message, args: string[]) {
-        const query = args.join(" ");
+        const query = args.join(" ").replace(/^`\S+|`+$/gm, "");
 
         AsyncQuery<any>(query)
         .then(res => {

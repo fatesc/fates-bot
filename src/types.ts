@@ -28,3 +28,11 @@ export interface user {
     blacklist_reason: string
     backdoor_perms: boolean
 }
+
+export interface config {
+    name: string,
+    config: {
+        prefix: string
+        blacklistedWords: Array<string>
+    }
+}

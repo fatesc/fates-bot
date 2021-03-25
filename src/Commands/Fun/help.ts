@@ -11,7 +11,7 @@ module.exports = {
         const commandModule = args[0] ? commands.get(args[0]) : undefined
         if (commandModule) {
             return message.channel.send(new MessageEmbed()
-            .setTitle(`Command: ${commandModule.name}`)
+                .setTitle(`Command: ${commandModule.name}`)
             .setDescription(`\`\`\`Command: ${commandModule.name}\nDescription: ${commandModule.description}\nUsage: ${commandModule.usage ?? commandModule.name}\nAliases: ${commandModule.aliases ? commandModule.aliases.join(", ") ?? "none" : "none"}\nCooldown: ${commandModule.cooldown}\nType: ${commandTypes.get(commandModule.name)}\`\`\``)
             )
         }
@@ -19,7 +19,7 @@ module.exports = {
             let description = []        
             commands.forEach(cmd => {
                 if (commandTypes.get(cmd.name) == type){
-                    if (type == "fates admin" && !message.member.hasPermission("ADMINISTRATOR")) return
+                    if (type == "fates admin" && message.channel.type == 'dm' || !message.member?.hasPermission("ADMINISTRATOR")) return
                     description.push(`${cmd.name}: ${cmd.description}`);
                 }
             });

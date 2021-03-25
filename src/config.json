@@ -4,7 +4,7 @@
             "name": "guildName",
             "config": {
                 "prefix": "-",
-                "blacklistedWords": ["nigger", "nigga"]
+                "blacklistedWords": [""]
             }
         }
     }

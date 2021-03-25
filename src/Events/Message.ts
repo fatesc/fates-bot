@@ -1,5 +1,4 @@
 import { Message } from "discord.js";
-import config from "../temp-config.json"
 import { client, commands } from "../Client";
 import { runCommand } from "../Handler";
 
@@ -18,15 +17,16 @@ function checkMessage(message: Message) {
 }
 
 export default function() {
-    client.on("message", (message: Message) => {
-        const prefix = config.prefix
+    client.on("message", async (message: Message) => {
+        const prefix = (await import("../config.json")).guilds[message.guild.id]?.config.prefix ?? "-"
+
         try {
             const first = message?.mentions?.members.first()
             if (first && first.user.id == client.user.id) {
                 return message.channel.send(`Prefix is \`${prefix}\``)
             }
         } catch {}
-        checkMessage(message);
+        await checkMessage(message);
         
         if (!message.content.startsWith(prefix) || message.author.bot) return;
     

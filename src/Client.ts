@@ -1,5 +1,5 @@
 import { Client, Collection, Intents } from "discord.js"
-import { readdir, stat } from "fs"
+import { readdir, stat, writeFileSync } from "fs"
 import { join } from "path";
 import { ConnectionOptions } from "mysql2"
 import { createPool } from "mysql2/promise"
@@ -38,13 +38,26 @@ deepsearch(join(__dirname + "/Commands/"), (file) => {
     console.log(`${command.name ?? file.split("\\")[file.split("\\").length - 1]} (${commandTypes.get(command.name)}) is ready!`);
 });
 
-client.on("ready", () => {
+client.on("ready", async () => {
     console.log(`${client.user.tag} is ready ✔`);
     client.user.setActivity("fates admin", {type: "PLAYING"});
     deepsearch(join(__dirname + "/Events/"), (file) => {
         require(file).default();
         console.log(`Event ${(file.split("\\")[file.split("\\").length - 1] ?? file.split("/")[file.split("/").length - 1]).replace(/\.js/,"")} is ready!`);
-    })
+    });
+
+    const config = await import("./config.json");
+
+    const ids = client.guilds.cache.map(guild => guild.id).filter(id => !Object.keys(config.guilds).includes(id));
+
+    for (const id of ids) {
+        const guild = await client.guilds.fetch(id, true, true);
+        const newServer = {
+            [id]: ({...(config).guilds["0"]})
+        }
+        newServer[id].name = guild.name
+        writeFileSync(__dirname + "/config.json", JSON.stringify(Object.assign(config, newServer)));
+    }
 });
 
 const db: ConnectionOptions = {
@@ -54,8 +67,9 @@ const db: ConnectionOptions = {
 }
 export const sql = createPool(db)
 
-sql.getConnection().then(connection => {
+sql.getConnection().then((connection) => {
     console.log(`connected to mysql//mariadb`);
+    connection.release()
 })
 
 client.login(process.env.OLDTOKEN);

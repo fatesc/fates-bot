@@ -7,11 +7,11 @@ module.exports = {
     name: "showkey",
     description: "shows you your fates admin key",
     usage: "showkey",
-    run(message: Message, args: string[]) {
+    run(message: Message) {
         AsyncQuery<Array<user>>("SELECT `key` FROM whitelist.user WHERE discord_id = ?",
             [message.author.id]
         ).then(res => {
-            if (res[0].id) {
+            if (res[0].key) {
                 message.channel.send(new MessageEmbed()
                     .setTitle("Key")
                     .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
