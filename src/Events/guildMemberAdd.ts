@@ -14,7 +14,7 @@ export default function() {
                     [0, null, member.user.id]
                 ).then(res => {
                     if (res?.affectedRows >= 1) {
-                        member.roles.add(member.guild.roles.cache.find(role => role.name.toLowerCase() == 'buyer'))
+                        member.roles.add(member.guild.roles.cache.find(role => role.name.toLowerCase() == 'buyer'), "restoring whitelist from user joining")
                         .then(m => {
                             m.send("your whitelist has been added back");
                             client.guilds.fetch("769988189762486302", true, true)

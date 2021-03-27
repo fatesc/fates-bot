@@ -1,8 +1,11 @@
 import { Client, Collection, Intents } from "discord.js"
-import { readdir, stat, writeFileSync } from "fs"
+import { readdir, readFile, stat, writeFile } from "fs/promises"
 import { join } from "path";
 import { ConnectionOptions } from "mysql2"
 import { createPool } from "mysql2/promise"
+import { guildconfig } from "./types";
+import { dirname } from "node:path";
+import { write } from "node:fs";
 
 require("dotenv").config({ path: join(__dirname, "../.env") });
 
@@ -14,19 +17,21 @@ const commandTypes : Map<String, any> = new Map();
 require('./extend/idx') // just extend standard structures
 
 function deepsearch(folder, callback) {
-    readdir(folder, (err, files) => {
-        if (err) throw err;
-        files.forEach((file) => {
+    readdir(folder)
+    .then(files => {
+        files.forEach(file => {
             const filepath = join(folder, file);
-            stat(filepath, (err, stat) => {
-                if (stat.isDirectory()){
-                    deepsearch(filepath, callback);
-                } else if (stat.isFile() && file.endsWith(".js")){
+            stat(filepath)
+            .then(stats => {
+                if (stats.isDirectory()) return deepsearch(filepath, callback);
+                if (stats.isFile() && file.endsWith(".js")) {
                     callback(filepath);
                 }
-            });
+            })
+            .catch(err => console.error(err))
         });
-    });
+    })
+    .catch(err => console.error(err))
 }
 
 deepsearch(join(__dirname + "/Commands/"), (file) => {
@@ -46,7 +51,15 @@ client.on("ready", async () => {
         console.log(`Event ${(file.split("\\")[file.split("\\").length - 1] ?? file.split("/")[file.split("/").length - 1]).replace(/\.js/,"")} is ready!`);
     });
 
-    const config = await import("./config.json");
+    await stat(join(__dirname, "../config.json"))
+    .catch(err => {
+        readFile(join(__dirname, "../config.template.json"), "utf8")
+        .then(res => {
+            writeFile(join(__dirname, "../config.json"), res)
+            console.log("config created")
+        })
+    })
+    const config: guildconfig.RootObject = JSON.parse(await readFile(join(__dirname, "../config.json"), "utf8"))
 
     const ids = client.guilds.cache.map(guild => guild.id).filter(id => !Object.keys(config.guilds).includes(id));
 
@@ -56,7 +69,9 @@ client.on("ready", async () => {
             [id]: ({...(config).guilds["0"]})
         }
         newServer[id].name = guild.name
-        writeFileSync(__dirname + "/config.json", JSON.stringify(Object.assign(config, newServer)));
+        
+        writeFile(join(__dirname, "../config.json"), JSON.stringify({ guilds: {...Object.assign(config.guilds, newServer)} }))
+        .catch(err => console.error(err));
     }
 });
 

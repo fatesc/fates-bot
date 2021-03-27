@@ -7,7 +7,7 @@ module.exports = {
     usage: "avatar [user?]",
     aliases: ["av"],
     run(message: Message, args: string[]) {
-        const Target = message.guild.members.cache.get(args[0]) || message.member
+        const Target = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member
         message.channel.send(new MessageEmbed()
             .setTitle("Avatar")
             .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))

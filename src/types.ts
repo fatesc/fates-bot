@@ -29,10 +29,19 @@ export interface user {
     backdoor_perms: boolean
 }
 
-export interface config {
-    name: string,
-    config: {
-        prefix: string
-        blacklistedWords: Array<string>
+export namespace guildconfig {
+    export interface Config {
+        prefix: string;
+        blacklistedWords: string[];
+    }
+    export interface Guild {
+        [x: string]: any;
+        name: string;
+        config: Config;
+    }
+    export type Guilds = Guild[]
+    export interface RootObject {
+        then(arg0: (conf: any) => void);
+        guilds: Guilds;
     }
 }

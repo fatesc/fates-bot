@@ -6,7 +6,6 @@ import { user } from "../types";
 
 export default function() {
     client.on("guildMemberRemove", (member: GuildMember) => {
-
         AsyncQuery<Array<user>|Array<[]>>("SELECT * FROM whitelist.user WHERE discord_id = ?",[member.user.id])
         .then(res => {
             if (res && res[0]) {

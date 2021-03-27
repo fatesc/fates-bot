@@ -1,13 +1,14 @@
 import { Message, MessageEmbed } from "discord.js";
 import { client, commands, commandTypes } from "../../Client";
-import { Command } from "../../types";
+import { Command, guildconfig } from "../../types";
+import { getServerConfig } from "../Util/getConf";
 
 module.exports = {
     name: "help",
     description: "gives you help on all the commands",
     usage: "help [command?]",
     cooldown: 3,
-    run(message: Message, args: string[]) {
+    async run(message: Message, args: string[]) {
         const commandModule = args[0] ? commands.get(args[0]) : undefined
         if (commandModule) {
             return message.channel.send(new MessageEmbed()
@@ -36,7 +37,7 @@ module.exports = {
             .addField("fun", "react with :one: to see commands with the fun type")
             .addField("nsfw", "react with :two: to see commands with the nsfw type")
             .addField("moderation", "react with :three: to see commands with the moderation type")
-            .setDescription(`\`${require("../../temp-config.json").prefix}help [command]\` for more information about the command`)
+            .setDescription(`\`${(await getServerConfig(message.guild.id)).config.prefix}help [command]\` for more information about the command`)
             ).then(async msg => {
             await msg.react("1️⃣");
             await msg.react("2️⃣");
