@@ -1,4 +1,11 @@
-{"guilds":
-    {"0":{"name":"guildName","config":{"prefix":"-","blacklistedWords":[""]}}},
-    "807661219300376577":{"name":"test server","config":{"prefix":"-","blacklistedWords":[""]}
-    }}
+{
+   "guilds": {
+      "0": {
+         "name": "template",
+         "config": {
+            "prefix": ";",
+            "blacklistedWords": []
+         }
+      }
+   }
+}
