@@ -60,7 +60,6 @@ export default function() {
         checkMessage(message)
         .then(res => {
             if (!message.content.startsWith(prefix)) return;
-            console.log(res)
             if (res) {
                 message.content.slice(prefix.length).split("!!").forEach(arg => {
                     const args : any = arg.split(" ");

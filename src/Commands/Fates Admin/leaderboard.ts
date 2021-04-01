@@ -14,7 +14,7 @@ module.exports = {
     run(message: Message, args: string[]){
         AsyncQuery<Array<user>>("SELECT * FROM whitelist.user ORDER BY execution_count DESC LIMIT 10")
         .then(res => {
-            return new Array(10).fill(null).map((v:user,i) => `${i+1}. ${v.discord_tag} - \`${v.execution_count}\``)
+            return new Array(10).fill(null).map((v:user,i) => `${i+1}. ${res[i].discord_tag} - \`${res[i].execution_count}\``)
         }).then(highest => {
             message.channel.send(new MessageEmbed()
                 .setTitle("top 10 fates admin executions")
