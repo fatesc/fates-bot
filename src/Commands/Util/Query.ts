@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { MessageEmbed } from "discord.js";
 import { FieldPacket, OkPacket, QueryError, ResultSetHeader, RowDataPacket } from "mysql2";
-import { sql } from "../../Client";
+import { sql } from "../../index";
 
 export async function AsyncQuery<T>(query: string, args?: any[] | object): Promise<T> {
     return new Promise((resolve, reject) => {

@@ -1,8 +1,6 @@
 import { Client, Collection, Intents } from "discord.js"
 import { readdir, readFile, stat, writeFile } from "fs/promises"
 import { join } from "path";
-import { ConnectionOptions } from "mysql2"
-import { createPool } from "mysql2/promise"
 import { Command, guildconfig } from "./types";
 
 require("dotenv").config({ path: join(__dirname, "../.env") });
@@ -73,22 +71,9 @@ client.on("ready", async () => {
     })
 });
 
-const db: ConnectionOptions = {
-    host: process.env.SQLHOST,
-    user: process.env.SQLUSER,
-    password: process.env.SQLPASSWORD,
-}
-export const sql = createPool(db)
-
-sql.getConnection().then((connection) => {
-    console.log(`connected to mysql//mariadb`);
-    connection.release()
-})
-
-client.login(process.env.TOKEN);
 
 export { client, commands } 
 
-
+export default client
 
 
