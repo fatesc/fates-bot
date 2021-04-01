@@ -1,35 +1,47 @@
+import { PartialMessage } from "discord.js";
 import { Message } from "discord.js";
 import { client, commands } from "../Client";
 import { getServerConfig } from "../Commands/Util/getConf";
+import { isOwner } from "../Commands/Util/isOwner";
 import { runCommand } from "../Handler";
 
-function checkMessage(message: Message): Promise<boolean> { 
+function checkMessage(message: Message|PartialMessage): Promise<boolean> { 
     return new Promise((resolve) => {
-        const reg = new RegExp(/.gg\/|.com\/invite/gi);
-        if (message.content.match(reg) && message.author.id != client.user.id) {
-            if (message.deletable){
-                message.delete()
-                .then(() => {
-                    message.channel.send(`${message.member} no invite links allowed.`);
+        if (!isOwner(message.member)) {
+            const reg = new RegExp(/.gg\/|.com\/invite/gi);
+            if (message.content.match(reg) && message.author.id != client.user.id) {
+                if (message.deletable){
+                    message.delete()
+                    .then(() => {
+                        message.channel.send(`${message.member} no invite links allowed.`);
+                        return resolve(false)
+                    })
+                } else {
+                    message.channel.send(`${message.member} no invite links allowed, but i couldn't delete it`);
                     return resolve(false)
-                })
-            } else {
-                message.channel.send(`${message.member} no invite links allowed, but i couldn't delete it`);
-                return resolve(false)
+                }
             }
-        }
-    
-        getServerConfig(message.guild.id)
-        .then(res => res.config)
-        .then(res => {
-            res.blacklistedWords.forEach(word => {
-                if (message.content.includes(word) && word.length >= 3) {
-                    if (message.deletable) message.delete({ reason: `sending a blacklisted message: ${word}`})
-                    .then(() => message.channel.send(`${message.member} you are sending a message which includes a blacklisted word`))
-                    return resolve(true)
+        
+            getServerConfig(message.guild.id)
+            .then(res => res.config)
+            .then(res => {
+                let reason: Array<string> // reasons for blacklisted words will be added soon
+                const has = res.blacklisted.some(e => {
+                    if (e.match(/^\/.*\/$/)) return new RegExp(e.substring(1, e?.length-1), "gi").test(message.content.toLowerCase())                        
+                    return message.content.toLowerCase().includes(e)
+                });
+                if (has) {
+                    if (message.deletable) {
+                        message.delete()
+                        .then(() => {
+                            message.channel.send(`you are sending a message that is not allowed to be sent. ${reason ? `\`\`\`Reason:\n${reason.map((v,i) => `${i+1} - ${v}`).join("\n")}` : ""}`)
+                            return resolve(false)        
+                        })
+                    }
                 }
             })
-        })
+            resolve(true)
+        }
         resolve(true)
     })
 }
@@ -48,6 +60,7 @@ export default function() {
         checkMessage(message)
         .then(res => {
             if (!message.content.startsWith(prefix)) return;
+            console.log(res)
             if (res) {
                 message.content.slice(prefix.length).split("!!").forEach(arg => {
                     const args : any = arg.split(" ");

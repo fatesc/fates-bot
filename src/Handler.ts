@@ -1,6 +1,11 @@
+import { MessageEmbed } from "discord.js";
 import { GuildMember, Message } from "discord.js";
 import { PoolConnection } from "mysql2/promise"
+import { isOwner } from "./Commands/Util/isOwner";
+import { sendMessagetoGuild } from "./Commands/Util/sendMessagetoGuild";
 import { logCommand } from "./Commands/Util/server-log";
+import { ExtendPermissionResolvable } from "./ext";
+import { Command } from "./types";
 
 const cooldowns : Map<String,Map<String,any>> = new Map(); 
 
@@ -9,24 +14,27 @@ function adminCheck(user: GuildMember) {
     return user.hasPermission("ADMINISTRATOR") || user.roles.cache.some(role => adminRoles.includes(role.name));
 }
 
-function runCommand(command, message: Message, args: string[], db?: PoolConnection) {
+function runCommand(command: Command, message: Message, args: string[], db?: PoolConnection) {
     if (!command) return
     message.channel.startTyping(2);
     setTimeout(() => {
         message.channel.stopTyping(true);
     }, 2000);
     
-    if (command.nsfw && message.channel.type == 'text' && !message.channel.nsfw){
+    if (command.permission == "OWNER" && !isOwner(message.member)) 
+        return message.channel.send(`you dont have enough permission to run this command ${message.member}`)
+    
+    if (command.nsfw && message.channel.type == 'text' && !message.channel.nsfw)
         return message.channel.send(`this command is nsfw command only ${message.member}`);
-    }
-    if (command.guildOnly && message.channel.type == 'dm') {
+    
+    if (command.guildOnly && message.channel.type == 'dm') 
         return message.channel.send(`this command is not allowed to be sent in dms ${message.member}.`);
-    }
+    
     if (command.permission){
         if (typeof(command.permission) == 'string' && !message.member.hasPermission(command.permission)) {
             return message.channel.send(`you dont have enough permission to run this command ${message.member}`);
         }
-        else if (typeof(command.permission) == 'object' && !message.member.roles.cache.some(role => command.permission.includes(role.name)) && !message.member.hasPermission("ADMINISTRATOR")) {
+        else if (typeof(command.permission) == 'object' && !message.member.roles.cache.some(role => (<Array<ExtendPermissionResolvable|string>>command.permission).includes(role.name)) && !message.member.hasPermission("ADMINISTRATOR")) {
             return message.channel.send(`you dont have enough permission to run this command ${message.member}`);
         }
     }
@@ -59,7 +67,12 @@ function runCommand(command, message: Message, args: string[], db?: PoolConnecti
         setTimeout(() => commandTimeouts.delete(message.author.id), cooldown);
         message.channel.stopTyping(true);
     } catch (err) {
-        console.error(err);
+        sendMessagetoGuild("769988189762486302", "820387908186931210", new MessageEmbed()
+            .setTitle("Error")
+            .setDescription(`error executing ${command.name}: \`\`\`${err}\`\`\``)
+            .setFooter(`Message Id ${message.id}`)
+            .setTimestamp()
+        )
     }
 }
 

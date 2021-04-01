@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
-import { client, commands, commandTypes } from "../../Client";
-import { Command, guildconfig } from "../../types";
+import { client, commands } from "../../Client";
+import { Command } from "../../types";
 import { getServerConfig } from "../Util/getConf";
 
 module.exports = {
@@ -13,23 +13,20 @@ module.exports = {
         if (commandModule) {
             return message.channel.send(new MessageEmbed()
                 .setTitle(`Command: ${commandModule.name}`)
-            .setDescription(`\`\`\`Command: ${commandModule.name}\nDescription: ${commandModule.description}\nUsage: ${commandModule.usage ?? commandModule.name}\nAliases: ${commandModule.aliases ? commandModule.aliases.join(", ") ?? "none" : "none"}\nCooldown: ${commandModule.cooldown}\nType: ${commandTypes.get(commandModule.name)}\`\`\``)
+                .setDescription(`\`\`\`Command: ${commandModule.name}\nDescription: ${commandModule.description}\nUsage: ${commandModule.usage ?? commandModule.name}\nAliases: ${commandModule.aliases ? commandModule.aliases.join(", ") ?? "none" : "none"}\nCooldown: ${commandModule.cooldown}\nType: ${commandModule.type}\`\`\``)
             )
         }
-        function helpembed(type, msg){
-            let description = []        
-            commands.forEach(cmd => {
-                if (commandTypes.get(cmd.name) == type){
-                    if (type == "fates admin" && message.channel.type == 'dm' || !message.member?.hasPermission("ADMINISTRATOR")) return
-                    description.push(`${cmd.name}: ${cmd.description}`);
-                }
-            });
-            msg.edit(new MessageEmbed()
-                .setTitle(`${type} cmds`)
-                .setDescription(`${description.join("\n")}`)
-            );
+        function helpembed(type: string, msg: Message): Message {
+            const filterCommands = commands.filter(command => command.type == type).map(command => `${command.name}: ${command.description}`)
+            if (msg.embeds[0].title.split(" ")[0] != type) {
+                msg.edit(new MessageEmbed()
+                    .setTitle(`${type} cmds`)
+                    .setDescription(filterCommands.join("\n"))
+                )
+            }
+            return msg
         }
-        const helpmap : Map<string,string> = new Map([["1️⃣","fun"],["2️⃣","nsfw"],["3️⃣","moderation"],["4️⃣","fates admin"]]);
+        const helpmap : Map<string,string> = new Map([["1️⃣","fun"],["2️⃣","nsfw"],["3️⃣","moderation"],["4️⃣","fates admin"],["5️⃣", "owner"]]);
         let help = true
         message.channel.send(new MessageEmbed()
             .setTitle("Commands")
@@ -43,6 +40,7 @@ module.exports = {
             await msg.react("2️⃣");
             await msg.react("3️⃣");
             await msg.react("4️⃣")
+            await msg.react("5️⃣")
             .then(() => {
                 client.on("messageReactionAdd", (reaction, reactor) => {
                     if (help && reactor.id == message.author.id){  
@@ -56,3 +54,52 @@ module.exports = {
         });
     }
 } as Command
+
+// import { MessageEmbed } from "discord.js"
+// import { Message } from "discord.js"
+// import { commands } from "../../Client"
+// import { Command } from "../../types"
+
+// module.exports = {
+//     name: "help",
+//     description: "gives you help on the current commands",
+//     usage: "help [command?]",
+//     cooldown: 3,
+//     async run(message: Message, args: string[]) {
+//         const command: Readonly<Command> = args[0] && commands.get(args[0])
+//         if (command) {
+//             return message.channel.send(new MessageEmbed()
+//                 .setTitle(`Command: ${command.name}`)
+//                 .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+//                 .setDescription(`\`\`\`Command: ${command.name}\nDescription: ${command.description}\nUsage: ${command.usage ?? command.name}\nAliases: ${command.aliases ? command.aliases.join(", ") ?? "none" : "none"}\nCooldown: ${command.cooldown}\nType: ${command.type}\`\`\``)
+//             )
+//         }
+//         let commandTypes: string[] = commands.map(x => x.type)
+//         commandTypes = commandTypes.filter((v,i) => commandTypes.indexOf(v) == i).sort((a,b) => b.length - a.length);
+//         const embed = new MessageEmbed()
+//         embed.setTitle("Commands")
+//         embed.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
+//         commandTypes.forEach((type,i) => {
+//             embed.addField(type, `react with ${i+1} to see commands with the ${type} type`)
+//         })
+//         message.channel.send(embed)
+//         .then(msg => {
+//             Array.from(helpmap).forEach(async v => {
+//                 await msg.react(v[0])
+//             })
+//         })
+
+//     }
+// }
+// const b = [["1️⃣","fun"],["2️⃣","nsfw"],["3️⃣","moderation"],["4️⃣","fates admin"],["d","owner"]].sort((a,b) => b[1].length - a[1].length);
+// const helpmap : Map<string,string> = new Map(b);
+// function helpembed(type: string, msg: Message): Message {
+//     const filterCommands = commands.filter(command => command.type == type).map(command => `${command.name}: ${command.description}`)
+//     if (msg.embeds[0].title.split(" ")[0] != type) {
+//         msg.edit(new MessageEmbed()
+//             .setTitle(`${type} cmds`)
+//             .setDescription(filterCommands.join("\n"))
+//         )
+//     }
+//     return msg
+// }

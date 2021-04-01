@@ -1,3 +1,4 @@
+import { Message } from "discord.js";
 import { MessageEmbed } from "discord.js";
 import { FieldPacket, OkPacket, QueryError, ResultSetHeader, RowDataPacket } from "mysql2";
 import { sql } from "../../Client";
@@ -22,7 +23,7 @@ export async function AsyncQuery<T>(query: string, args?: any[] | object): Promi
 }
 
 
-export function handleSqlRejection(reject, message?: Message, optional?: string) {
+export function handleSqlRejection(reject: PromiseRejectedResult, message?: Message, optional?: string) {
     const rejectionmsg = `${optional ?? ""} ${reject}`
     if (message) {
         message.channel.send(new MessageEmbed()

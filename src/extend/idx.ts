@@ -1,4 +1,7 @@
+// @ts-nocheck
+
 const { APIMessage, Structures } = require("discord.js");
+import { Permissions } from "discord.js";
 
 class Message extends Structures.get("Message") {
 	async inlineReply(content, options) {

@@ -31,6 +31,6 @@ module.exports = {
                     .setDescription(`${Target} is not whitelisted, user couldn't be updated`)
                 );
             }
-        }, (r) => handleSqlRejection(message,r));
+        }, (r) => handleSqlRejection(r,message));
     }
 } as Command

@@ -1,3 +1,5 @@
+import { ExtendPermissionResolvable } from "./ext";
+
 export interface Command {
     name: string,
     description: string,
@@ -7,7 +9,8 @@ export interface Command {
     nsfw?: boolean,
     guildOnly?: boolean,
     aliases?: Array<string>,
-    permission?: string | Array<string>
+    permission?: ExtendPermissionResolvable,
+    type?: string
 }
 
 export interface key {
@@ -32,16 +35,16 @@ export interface user {
 export namespace guildconfig {
     export interface Config {
         prefix: string;
-        blacklistedWords: string[];
+        blacklisted: string[];
     }
-    export interface Guild {
-        [x: string]: any;
+    export type Guild = {
         name: string;
         config: Config;
+    };
+    interface Guilds {
+        [val: string]: Guild
     }
-    export type Guilds = Guild[]
     export interface RootObject {
-        then(arg0: (conf: any) => void);
         guilds: Guilds;
     }
 }

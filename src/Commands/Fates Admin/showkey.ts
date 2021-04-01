@@ -20,6 +20,6 @@ module.exports = {
             } else {
                 message.reply("You are not whitelisted.");
             }
-        }, (r) => handleSqlRejection(message,r));
+        }, (r) => handleSqlRejection(r,message));
     }
 } as Command

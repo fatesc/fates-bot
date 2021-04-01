@@ -1,4 +1,4 @@
-import * as fetch from "node-fetch";
+import fetch from "node-fetch";
 import { Message } from "discord.js";
 import { Command } from "../../types";
 
@@ -26,7 +26,7 @@ module.exports = {
                  "api-key": process.env.POZM_KEY ?? ""
              }       
         }).then(res => res.json(), err => {return message.channel.send("Got error from pozm's api " + err.name)})
-        .then(body => {
+        .then((body: {data: {files: string[]}}) => {
             const files = body.data.files.join(" ")
             if (body.data.files.join("") == "") return message.channel.send(`no results found ${message.member}`);
 

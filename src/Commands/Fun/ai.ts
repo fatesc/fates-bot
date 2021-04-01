@@ -1,7 +1,7 @@
 import { Message, Util } from "discord.js"
 import { Command } from "../../types"
 import { helpCommand } from "../Util/HelpCommand";
-import * as fetch from "node-fetch"
+import fetch from "node-fetch"
 
 module.exports = {
     name: "ai",

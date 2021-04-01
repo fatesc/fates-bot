@@ -21,13 +21,13 @@ module.exports = {
                 getServerConfig(message.guild.id)
                 .then(res => {
                     embed.setTitle("Complete")
-                    embed.setDescription(res.config.blacklistedWords.length ? res.config.blacklistedWords.join(", ") : "no words blacklisted")
+                    embed.setDescription(res.config.blacklisted.length ? res.config.blacklisted.join(", ") : "no words blacklisted")
                     message.channel.send(embed)
                 })
                 break;
             case "clear":
                 setServerConfig(message.guild.id, (conf) => {
-                    conf.blacklistedWords = []
+                    conf.blacklisted = []
                 })
                 .then(() => {
                     embed.setTitle("Completed")
@@ -37,8 +37,8 @@ module.exports = {
                 break;
             case "delete":
                 setServerConfig(message.guild.id, (conf) => {
-                    if (conf.blacklistedWords.includes(args[1])) {
-                        conf.blacklistedWords = conf.blacklistedWords.filter(word => word != args[1])
+                    if (conf.blacklisted.includes(args[1])) {
+                        conf.blacklisted = conf.blacklisted.filter(word => word != args[1])
                         embed.setTitle("Completed")
                         embed.setDescription(`deleted word ${args[1]} from the blacklisted words`)
                     } else {
@@ -53,12 +53,12 @@ module.exports = {
             case "add":
                 if (!args[1]) return helpCommand(message, this.name, `${message.member}, Invalid Command Usage\n`);
                 setServerConfig(message.guild.id, (conf) => {
-                    conf.blacklistedWords.push(args[1])
+                    conf.blacklisted.push(args[1])
                 })
                 .then(() => {
                     embed.setTitle("Completed")
                     embed.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-                    embed.setDescription(`added word "${args[1]}" to the blacklisted words`)
+                    embed.setDescription(`added ${(/^\/.*\/$/.test(args[1])) ? "regex" : "word"} "${args[1]}" to the blacklisted words`)
                     message.channel.send(embed)
                 })
                 break;

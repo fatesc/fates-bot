@@ -3,20 +3,17 @@ import { readdir, readFile, stat, writeFile } from "fs/promises"
 import { join } from "path";
 import { ConnectionOptions } from "mysql2"
 import { createPool } from "mysql2/promise"
-import { guildconfig } from "./types";
-import { dirname } from "node:path";
-import { write } from "node:fs";
+import { Command, guildconfig } from "./types";
 
 require("dotenv").config({ path: join(__dirname, "../.env") });
 
 const intents = new Intents([Intents.NON_PRIVILEGED, "GUILD_MEMBERS"]);
-const client : Client = new Client({ ws: { intents } });
-const commands : Collection<String, any> = new Collection();
-const commandTypes : Map<String, any> = new Map();
+const client = new Client({ ws: { intents } });
+const commands : Collection<String, Command> = new Collection();
 
 require('./extend/idx') // just extend standard structures
 
-function deepsearch(folder, callback) {
+function deepsearch(folder: string, callback: (file: string) => void) {
     readdir(folder)
     .then(files => {
         files.forEach(file => {
@@ -35,12 +32,11 @@ function deepsearch(folder, callback) {
 }
 
 deepsearch(join(__dirname + "/Commands/"), (file) => {
-    const type = file.split("\\")[file.split("\\").length - 2] ?? file.split("/")[file.split("/").length - 2] // adding so i can run on linux aswell
+    let type = file.split("\\")[file.split("\\").length - 2] ?? file.split("/")[file.split("/").length - 2] // adding so i can run on linux aswell
     if (type == "Util") return;
     const command = require(file);
-    commands.set(command.name, command);
-    commandTypes.set(command.name, command.type ?? type.toLowerCase());
-    console.log(`${command.name ?? file.split("\\")[file.split("\\").length - 1]} (${commandTypes.get(command.name)}) is ready!`);
+    commands.set(command.name, {...command, type: type.toLowerCase()});
+    console.log(`${command.name ?? file.split("\\")[file.split("\\").length - 1]} (${type}) is ready!`);
 });
 
 client.on("ready", async () => {
@@ -89,9 +85,9 @@ sql.getConnection().then((connection) => {
     connection.release()
 })
 
-client.login(process.env.OLDTOKEN);
+client.login(process.env.TOKEN);
 
-export { client, commands, commandTypes } 
+export { client, commands } 
 
 
 

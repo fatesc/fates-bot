@@ -9,9 +9,12 @@ module.exports = {
     usage: "users",
     permission: "ADMINISTRATOR",
     run(message: Message, args: string[]) {
-        AsyncQuery<Array<user>>("SELECT COUNT(*) from whitelist.user")
+        interface res {
+            [key: string]: any;
+        }
+        AsyncQuery<res>("SELECT COUNT(*) from whitelist.user")
         .then(res => {
             message.inlineReply(`${res[0]["COUNT(*)"]} amount of users whitelisted`);
-        }, (r) => handleSqlRejection(message,r));
+        }, (r) => handleSqlRejection(r,message));
     }
 } as Command

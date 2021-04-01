@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from "discord.js";
 import { Command } from "../../types";
-const fetch = require("node-fetch");
+import fetch from "node-fetch"
 
 module.exports = {
     name: "meme",

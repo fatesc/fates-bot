@@ -1,11 +1,11 @@
-import { MessageEmbed } from "discord.js";
+import { Message, MessageEmbed, TextChannel, DMChannel, NewsChannel } from "discord.js";
 
-export function newembed(message, title , description, image?, footer?) {
+export function newembed(message: TextChannel|DMChannel|NewsChannel, title: string, description: string, image?: string, footer?: {text: any, iconUrl: string}, timestamp?: number|Date) {
     const embed = new MessageEmbed()
     .setTitle(title)
     .setDescription(description)
-    .setFooter(footer ?? "")
+    .setFooter(footer.text, footer.iconUrl)
     .setImage(image)
-    .setTimestamp()
+    .setTimestamp(timestamp)
     message.send(embed);
 }

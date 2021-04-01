@@ -1,3 +1,4 @@
+import { PartialGuildMember } from "discord.js";
 import { GuildMember, MessageEmbed } from "discord.js";
 import { ResultSetHeader } from "mysql2";
 import { client } from "../Client";
@@ -5,7 +6,7 @@ import { AsyncQuery } from "../Commands/Util/Query";
 import { user } from "../types";
 
 export default function() {
-    client.on("guildMemberRemove", (member: GuildMember) => {
+    client.on("guildMemberRemove", (member: GuildMember|PartialGuildMember) => {
         AsyncQuery<Array<user>|Array<[]>>("SELECT * FROM whitelist.user WHERE discord_id = ?",[member.user.id])
         .then(res => {
             if (res && res[0]) {

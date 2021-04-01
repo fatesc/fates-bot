@@ -12,13 +12,10 @@ module.exports = {
     cooldown: 30,
     guildOnly: true,
     run(message: Message, args: string[]){
-        const highest = []
         AsyncQuery<Array<user>>("SELECT * FROM whitelist.user ORDER BY execution_count DESC LIMIT 10")
         .then(res => {
-            res.forEach(user => {
-                highest.push(`${highest.length+1}. ${user.discord_tag} - \`${user.execution_count}\``);
-            });
-        }).then(() => {
+            return new Array(10).fill(null).map((v:user,i) => `${i+1}. ${v.discord_tag} - \`${v.execution_count}\``)
+        }).then(highest => {
             message.channel.send(new MessageEmbed()
                 .setTitle("top 10 fates admin executions")
                 .setDescription(highest.join("\n"))
