@@ -5,6 +5,7 @@ import { Command } from "../../types";
 import { RandStrc, chinesechars } from "../Util/ChineseGen";  
 import { helpCommand } from "../Util/HelpCommand";
 import { AsyncQuery, handleSqlRejection } from "../Util/Query";
+import {ScriptText} from "../Util/lazy";
 
 module.exports = {
     name: "whitelist",
@@ -28,7 +29,7 @@ module.exports = {
                     m.send(new MessageEmbed()
                         .setTitle("Whitelisted")
                         .setAuthor(Target.user.username, Target.user.displayAvatarURL({ dynamic: true }))
-                        .setDescription(`your fate's admin key is \`${key}\`, use this key for the script in <#769997572470996992>`)
+                        .setDescription(`your fate's admin key is \`${key}\`, use this key for the script in <#769997572470996992>\nHeres the script.\n${ScriptText.replace('KEY_HERE',key)}`)
                     ).then(() => {
                         message.channel.send(new MessageEmbed()
                             .setTitle("Whitelisted")
