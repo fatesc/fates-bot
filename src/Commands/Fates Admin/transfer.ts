@@ -22,7 +22,7 @@ module.exports = {
                     [res.key, res.fingerprint, user2.id, user2.tag]
                 )
                 .then(res => {
-                    if (res.affectedRows > 1) {
+                    if (res.affectedRows >= 1) {
                         AsyncQuery<ResultSetHeader>("DELETE FROM whitelist.user WHERE discord_id = ?", [user1.id]);
                         message.channel.send(new MessageEmbed()
                             .setTitle("Completed")
