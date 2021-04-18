@@ -46,5 +46,6 @@ export namespace guildconfig {
     }
     export interface RootObject {
         guilds: Guilds;
+        blacklistedusers: string[];
     }
 }

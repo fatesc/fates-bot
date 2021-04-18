@@ -1,7 +1,7 @@
 import { PartialMessage } from "discord.js";
 import { Message } from "discord.js";
 import { client, commands } from "../Client";
-import { getServerConfig } from "../Commands/Util/getConf";
+import { getFullConfig, getServerConfig } from "../Commands/Util/getConf";
 import { isOwner } from "../Commands/Util/isOwner";
 import { runCommand } from "../Handler";
 
@@ -50,7 +50,7 @@ function checkMessage(message: Message|PartialMessage): Promise<boolean> {
 export default function() {
     client.on("message", async (message: Message) => {
         const prefix = (await getServerConfig(message.guild.id)).config.prefix
-        if (message.author.bot) return
+        if (message.author.bot || (await getFullConfig()).blacklistedusers.includes(message.author.id)) return
         try {
             const first = message?.mentions?.members.first()
             if (first && first.user.id == client.user.id) {

@@ -1,12 +1,15 @@
 {
-    "guilds": {
-       "0": {
-          "name": "template",
-          "config": {
-             "prefix": ";",
-             "blacklisted": []
-          }
-       }
-    }
- }
+   "guilds": {
+      "0": {
+         "name": "template",
+         "config": {
+            "prefix": ";",
+            "blacklisted": []
+         }
+      }
+   },
+   "blacklistedusers": [  
+
+   ]
+}
  
