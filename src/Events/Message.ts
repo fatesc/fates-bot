@@ -59,7 +59,7 @@ export default function() {
         } catch {}
         checkMessage(message)
         .then(res => {
-            if (!message.content.startsWith(prefix)) return;
+            if (prefix ? !message.content.startsWith(prefix) : "-") return;
             if (res) {
                 message.content.slice(prefix.length).split("!!").forEach(arg => {
                     const args : any = arg.split(" ");

@@ -12,11 +12,17 @@ module.exports = {
             [message.author.id]
         ).then(res => {
             if (res[0].key) {
-                message.channel.send(new MessageEmbed()
+                message.author.send(new MessageEmbed()
                     .setTitle("Key")
                     .setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
                     .setDescription(`your key is ${res[0].key}, don't share it`)
-                );
+                )
+                .then(() => {
+                    message.inlineReply("sent your key in dms");
+                })
+                .catch(err => {
+                    message.inlineReply("could not send you your key, turn on your dms");
+                })
             } else {
                 message.reply("You are not whitelisted.");
             }
