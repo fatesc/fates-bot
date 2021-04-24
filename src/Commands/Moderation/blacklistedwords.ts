@@ -52,13 +52,14 @@ module.exports = {
                 break;
             case "add":
                 if (!args[1]) return helpCommand(message, this.name, `${message.member}, Invalid Command Usage\n`);
+                const blword = args[1].replace(/^`\S+|`+$/gm, "").trim();
                 setServerConfig(message.guild.id, (conf) => {
-                    conf.blacklisted.push(args[1])
+                    conf.blacklisted.push(blword)
                 })
                 .then(() => {
                     embed.setTitle("Completed")
                     embed.setAuthor(message.author.username, message.author.displayAvatarURL({ dynamic: true }))
-                    embed.setDescription(`added ${(/^\/.*\/$/.test(args[1])) ? "regex" : "word"} "${args[1]}" to the blacklisted words`)
+                    embed.setDescription(`added ${(/^\/.*\/$/.test(blword)) ? "regex" : "word"} "${blword}" to the blacklisted words`)
                     message.channel.send(embed)
                 })
                 break;
