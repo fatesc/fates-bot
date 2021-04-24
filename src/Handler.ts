@@ -17,7 +17,7 @@ function adminCheck(user: GuildMember) {
 function runCommand(command: Command, message: Message, args: string[], db?: PoolConnection) {
     if (!command) return
 
-    if (command.type == "fates admin") return
+    if (command.type == "fates admin" && !isOwner(message.member)) return
 
     message.channel.startTyping(2);
     setTimeout(() => {
