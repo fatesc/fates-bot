@@ -30,7 +30,7 @@ export function setServerConfig(serverid: string, func: (param: guildconfig.Conf
         }
         getFullConfig()
         .then(config => {
-            writeFile(join(__dirname, "../../../config.json"), JSON.stringify({ guilds: {...Object.assign(config.guilds, {[serverid]: server})} }))
+            writeFile(join(__dirname, "../../../config.json"), JSON.stringify({ guilds: {...Object.assign(config.guilds, {[serverid]: server})}, blacklistedusers: config.blacklistedusers }))
             .then(async () => res((await getServerConfig(serverid)).config))
         })
     })

@@ -16,11 +16,14 @@ function adminCheck(user: GuildMember) {
 
 function runCommand(command: Command, message: Message, args: string[], db?: PoolConnection) {
     if (!command) return
+
+    if (command.type == "fates admin") return
+
     message.channel.startTyping(2);
     setTimeout(() => {
         message.channel.stopTyping(true);
     }, 2000);
-    
+
     if (command.permission == "OWNER" && !isOwner(message.member)) 
         return message.channel.send(`you dont have enough permission to run this command ${message.member}`)
     
@@ -52,7 +55,10 @@ function runCommand(command: Command, message: Message, args: string[], db?: Poo
         if (now < expirationTime) {
             message.channel.stopTyping(true);
             const timeLeft = (expirationTime - now) / 1000;
-            return message.reply(`you are on a ${timeLeft.toFixed(1)} cooldown`);
+            return message.reply(`you are on a ${timeLeft.toFixed(1)} cooldown`).then(msg => setInterval(() => {
+                message.delete();
+                msg.delete();
+            }, 10e3));
         }
     }
 

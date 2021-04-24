@@ -15,8 +15,8 @@ server.get("/user/:id", (req: Request, res: Response) => {
     })
     .then(body => body.json())
     .then(json => {
-        if (json.tag) {
-            json.avatar = `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`
+        if (json.username) {
+            json.avatarUrl = `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.webp`
             json.unix = convertIdToUnix(json.id);
             json.createdAt = unix(json.unix / 1000).format("YYYY-MM-DD, h:mm:ss A")
             res.json(json);
