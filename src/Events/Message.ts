@@ -50,7 +50,7 @@ function checkMessage(message: Message|PartialMessage): Promise<boolean> {
 
 
 export default function() {
-    const ws = new WebSocket("ws://fate0.xyz/scripts/fates-admin/chat?token=" + process.env.TOKEN);
+    const ws = new WebSocket("ws://fate0.xyz:8080/scripts/fates-admin/chat?token=" + process.env.TOKEN);
 
     setInterval(() => {
         ws.send("ping");
