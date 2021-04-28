@@ -15,6 +15,6 @@ sql.getConnection().then((connection) => {
     connection.release()
 })
 
-server.listen(80, () => console.log("server listening on port 80"));
+server.listen(8080, () => console.log("server listening on port 80"));
 client.login(process.env.TOKEN)
 .then(() => "client logged in");

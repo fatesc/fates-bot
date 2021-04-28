@@ -49,3 +49,9 @@ export namespace guildconfig {
         blacklistedusers: string[];
     }
 }
+
+export interface GlobalChat {
+    isAdmin: boolean
+    message: string
+    username: string
+}

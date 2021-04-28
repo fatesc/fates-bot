@@ -4,6 +4,8 @@ import { client, commands } from "../Client";
 import { getFullConfig, getServerConfig } from "../Commands/Util/getConf";
 import { isOwner } from "../Commands/Util/isOwner";
 import { runCommand } from "../Handler";
+import WebSocket from "ws";
+import { GlobalChat } from "../types";
 
 function checkMessage(message: Message|PartialMessage): Promise<boolean> { 
     return new Promise((resolve) => {
@@ -48,7 +50,23 @@ function checkMessage(message: Message|PartialMessage): Promise<boolean> {
 
 
 export default function() {
+    const ws = new WebSocket("ws://fate0.xyz/scripts/fates-admin/chat?token=" + process.env.TOKEN);
+
+    setInterval(() => {
+        ws.send("ping");
+    }, 15 * 1e3);
+
     client.on("message", async (message: Message) => {
+        if (!message.webhookID && !message.author.bot && message.channel.type == "text" && message.channel.id == "836323378654347264") {
+            const toSend: GlobalChat = {
+                isAdmin: message.member.hasPermission("ADMINISTRATOR"),
+                message: message.content,
+                username: message.author.tag,
+            }
+            ws.send(JSON.stringify(toSend));
+            return
+        }
+
         const prefix = (await getServerConfig(message.guild.id)).config.prefix
         if (message.author.bot || (await getFullConfig()).blacklistedusers.includes(message.author.id)) return
         try {
