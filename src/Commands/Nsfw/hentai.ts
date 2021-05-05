@@ -1,15 +1,17 @@
 import fetch from "node-fetch";
 import { Message } from "discord.js";
 import { Command } from "../../types";
+import { helpCommand } from "../Util/HelpCommand";
 
 module.exports = {
     name: "hentai",
     description: "gives you hentai with amount (optional)",
-    usage: "hentai [amount?/tags?]",
+    usage: "hentai [amount?/tag1?] [tag2?] [tag3?] ...",
     nsfw: true,
     cooldown: 2,
     guildOnly: true,
     run(message: Message, args: string[]){
+        if (!args[0]) return helpCommand(message, this.name, `${message.member}, Invalid Command Usage\n`);
         const amount = +args[0]
         if (!!amount) {
             args.shift();
@@ -28,6 +30,8 @@ module.exports = {
             for (let i = 0; i < files.length; i += 4) {
                 message.inlineReply(`${files.slice(i, i + 4).join(" ")}`);
             }
+        }, r => {
+            message.inlineReply(r)
         })
     }
 } as Command
