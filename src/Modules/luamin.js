@@ -255,7 +255,7 @@ function CreateLuaTokenStream(text) {
         let i_;
         for (i_ = 0; i_ < tokenBuffer; i_++) {
             let token = tokenBuffer[i_]
-            print(`${token.Type}<${token.Source}>`)
+            // print(`${token.Type}<${token.Source}>`)
         }
         throw `file<${line}:${char}>: ${str}`
     }
@@ -572,7 +572,7 @@ function CreateLuaParser(text) {
         } else {
             let i
             for (i=-3; i<=3; i++) {
-                print(`Tokens[${i}] = \`${peek(i).Source}\``)
+                // print(`Tokens[${i}] = \`${peek(i).Source}\``)
             }
             if (source) {
                 let a = `${getTokenStartPosition(tk)}: \`${source}\` expected.`
@@ -1415,7 +1415,7 @@ function CreateLuaParser(text) {
         let i = 0
         while (!isLast && !isBlockFollow()) {
             if (thing && thing == peek()) {
-                print(`INFINITE LOOP POSSIBLE ON STATEMENT ${thing.Source} :`,thing)
+                // print(`INFINITE LOOP POSSIBLE ON STATEMENT ${thing.Source} :`,thing)
             }
             thing = peek()
 
@@ -5123,7 +5123,6 @@ luaminp.Beautify = function(scr, options) {
 }
 
 luaminp.Uglify = function(src1, options) {
-    console.log("Sorry, but this is incredibly slow for large scripts.")
 
     let ast1 = CreateLuaParser(src1)
     let [glb1] = AddVariableInfo(ast1)
