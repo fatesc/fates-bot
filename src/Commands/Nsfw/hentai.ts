@@ -20,7 +20,7 @@ module.exports = {
         fetch(`https://danbooru.donmai.us/posts.json?tags=${searchquery}&limit=200`)
         .then(res => res.json())
         .then((res: Array<any>) => {
-            const files = res.sort(() => .5 - Math.random()).filter(a => !a.has_visible_children).map(a => a.large_file_url).slice(0, amount);
+            const files = res.sort(() => .5 - Math.random()).filter(a => !a.has_visible_children && !a.has_children).map(a => a.large_file_url).slice(0, amount);
             for (let i = 0; i < files.length; i += 4) {
                 message.inlineReply(`${files.slice(i, i + 4).join(" ")}`);
             }
