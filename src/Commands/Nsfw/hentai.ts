@@ -11,27 +11,19 @@ module.exports = {
     cooldown: 2,
     guildOnly: true,
     run(message: Message, args: string[]){
-        const amount = +args[0]
-        let tags
-        if (!!amount) {
+        const amount = args[0] ? !isNaN(+args[0]) ? +args[0] : 1 : 1
+        if (!isNaN(+args[0])) {
             args.shift();
-            tags = args.join(",");
         }
-        
-        if (!!amount && amount > 3 && !message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(`max is 3!! ${message.member}`);
-        
-        fetch(`https://api.r34.app/booru/gelbooru/posts?baseEndpoint=rule34.xxx&limit=${!amount ? 1 : amount}${tags ? "&tags=" + tags : ""}&tagsEndpoint=/autocomplete.php&defaultQueryIdentifiersTagsTag=q&defaultQueryIdentifiersTagsTagEnding=`, {
-            method: "GET", 
-        })
+        const searchquery = args.join(" ").replace(/\W/g, "");
+        if (amount > 3 && !message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(`max is 3!! ${message.member}`);
+        fetch(`https://danbooru.donmai.us/posts.json?tags=${searchquery}&limit=200`)
         .then(res => res.json())
-        .then(res => {
-            const files = res.map((a: any) => a.high_res_file.url);
-            
+        .then((res: Array<any>) => {
+            const files = res.sort(() => .5 - Math.random()).filter(a => !a.has_visible_children).map(a => a.large_file_url).slice(0, amount);
             for (let i = 0; i < files.length; i += 4) {
                 message.inlineReply(`${files.slice(i, i + 4).join(" ")}`);
             }
-        }, r => {
-            message.inlineReply(r)
         })
     }
 } as Command
