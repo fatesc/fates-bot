@@ -15,7 +15,7 @@ module.exports = {
         if (!isNaN(+args[0])) {
             args.shift();
         }
-        const searchquery = args.join(" ").replace(/\W/g, "");
+        const searchquery = args.join("+");
         if (amount > 3 && !message.member.hasPermission("ADMINISTRATOR")) return message.channel.send(`max is 3!! ${message.member}`);
         fetch(`https://danbooru.donmai.us/posts.json?tags=${searchquery}&limit=200`)
         .then(res => res.json())
