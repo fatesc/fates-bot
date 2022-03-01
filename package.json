@@ -63,7 +63,7 @@
     }
   },
   "dependencies": {
-    "@types/ws": "^7.4.2",
+    "@types/ws": "^8.5.2",
     "columnify": "^1.5.4",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
