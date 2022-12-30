@@ -63,7 +63,7 @@
     }
   },
   "dependencies": {
-    "@types/ws": "^7.4.2",
+    "@types/ws": "^8.5.4",
     "columnify": "^1.5.4",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
@@ -72,6 +72,6 @@
     "mysql2": "^2.2.5",
     "nexe": "^4.0.0-beta.18",
     "node-fetch": "^2.6.1",
-    "ws": "^7.4.5"
+    "ws": "^8.11.0"
   }
 }
